@@ -19,7 +19,7 @@ const signup = async (req, res) => {
             const checkUser = await userSchema.exists({ email })
 
             if (!checkUser) {
-                await userSchema.create({ role, username, email, address, city, password: await hash(password, 12) })
+                await userSchema.create({ username, email, address, city, role, password: await hash(password, 12) })
                 await SignupMail(username, email, "Sign Up Successfully")
 
                 res.status(201).json({ message: "User Created Successfully" })
@@ -70,10 +70,10 @@ const login = async (req, res) => {
 }
 
 const update_profile = async (req, res) => {
-    const { email, username, address, city, role } = req.body
+    const { email, username, address, city, } = req.body
     try {
         const filter = { email }
-        const update = { username, address, city, role }
+        const update = { username, address, city, }
         const doc = await userSchema.findOneAndUpdate(filter, update, { new: true })
         res.status(201).json({ user: doc, message: "Profile Updated Seccessfully" })
     } catch (error) {

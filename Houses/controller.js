@@ -61,7 +61,7 @@ const searchHouseByCity = async (req, res) => {
             res.json({ searchHouses, found_records: searchHouses.length })
         }
         else {
-            res.status(404).json({ message: `Not Found Results for City ${city}` })
+            res.status(404).json({ message: `Not Found Results for City ${city}. please! start` })
         }
     } catch (error) {
         res.status(400).json({ message: error.message })
