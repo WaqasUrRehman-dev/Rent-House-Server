@@ -25,7 +25,7 @@ const signup = async (req, res) => {
                 res.status(201).json({ message: "User Created Successfully" })
 
             } else {
-                res.json({ message: "user already exist" })
+                res.status(400).json({ message: "user already exist" })
             }
 
         } catch (error) {
