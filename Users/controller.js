@@ -72,7 +72,7 @@ const login = async (req, res) => {
         }
         catch (error) {
             res.status(400).json({
-                message: error.message
+                message: "user nhi hai"
             })
         }
     } else {
