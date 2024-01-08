@@ -14,13 +14,13 @@ const all_users = async (req, res) => {
 }
 
 const signup = async (req, res) => {
-    const { username, email, password, address, city } = req.body;
-    if (username && email && password && address && city) {
+    const { username, email, password, role, address, city } = req.body;
+    if (username && email && password && role && address && city) {
         try {
             const checkUser = await userSchema.exists({ email })
 
             if (!checkUser) {
-                await userSchema.create({ username, email, address, city, password: await hash(password, 12) })
+                await userSchema.create({ username, email, role, address, city, password: await hash(password, 12) })
                 await SignupMail(username, email, "Sign Up Successfully")
 
                 res.status(201).json({ message: "User Created Successfully" })
