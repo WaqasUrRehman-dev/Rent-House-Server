@@ -58,7 +58,7 @@ const login = async (req, res) => {
                         address: checkUser.address,
                         city: checkUser.city   
                     },
-                        process.env.JWT_KEY
+                        process.env.JWT_SECRET
                     )
                     res.json({ message: "Successfully Login", token })
                 } else {
