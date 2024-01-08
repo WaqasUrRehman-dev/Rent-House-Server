@@ -2,7 +2,7 @@ require('dotenv').config()
 const userSchema = require('./schema')
 const { hash, compare } = require('bcryptjs')
 const SignupMail = require('../utils/sendmail')
-const {sign} = require('jsonwebtoken')
+const { sign } = require('jsonwebtoken')
 
 const all_users = async (req, res) => {
     try {
@@ -53,12 +53,12 @@ const login = async (req, res) => {
                 if (decryptPass && email == checkUser.email) {
                     const token = sign({
                         name: checkUser.username,
-                        email : checkUser.email,
+                        email: checkUser.email,
                         address: checkUser.address,
                         city: checkUser.city,
                         role: checkUser.role
                     },
-                    process.env.JWT_SECRET
+                        process.env.JWT_SECRET
                     )
                     res.json({ message: "Successfully Login", token })
                 } else {
@@ -71,10 +71,12 @@ const login = async (req, res) => {
             }
         }
         catch (error) {
-            res.status(400).json({ message: "Required Field Missing" })
+            res.status(400).json({
+                message: error.message
+            })
         }
     } else {
-
+        res.status(400).json({ message: "Required Field Missing" })
     }
 
 }
