@@ -2,6 +2,7 @@ require('dotenv').config()
 const userSchema = require('./schema')
 const { hash, compare } = require('bcryptjs')
 const SignupMail = require('../utils/sendmail')
+const {sign} = require('jsonwebtoken')
 
 const all_users = async (req, res) => {
     try {
@@ -13,13 +14,13 @@ const all_users = async (req, res) => {
 }
 
 const signup = async (req, res) => {
-    const { username, email, password, address, city, role } = req.body;
-    if (username && email && password && address && city && role) {
+    const { username, email, password, address, city } = req.body;
+    if (username && email && password && address && city) {
         try {
             const checkUser = await userSchema.exists({ email })
 
             if (!checkUser) {
-                await userSchema.create({ username, email, address, city, role, password: await hash(password, 12) })
+                await userSchema.create({ username, email, address, city, password: await hash(password, 12) })
                 await SignupMail(username, email, "Sign Up Successfully")
 
                 res.status(201).json({ message: "User Created Successfully" })
@@ -50,7 +51,16 @@ const login = async (req, res) => {
                 const decryptPass = await compare(password, checkUser.password)
 
                 if (decryptPass && email == checkUser.email) {
-                    res.json({ message: "Successfully Login" })
+                    const token = sign({
+                        name: checkUser.username,
+                        email : checkUser.email,
+                        address: checkUser.address,
+                        city: checkUser.city,
+                        role: checkUser.role
+                    },
+                    process.env.JWT_SECRET
+                    )
+                    res.json({ message: "Successfully Login", token })
                 } else {
                     res.status(400).json({ message: "Incorrect Password" })
                 }
