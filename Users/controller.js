@@ -54,11 +54,11 @@ const login = async (req, res) => {
                     const token = sign({
                         name: checkUser.username,
                         email: checkUser.email,
+                        role: checkUser.role,
                         address: checkUser.address,
-                        city: checkUser.city,
-                        role: checkUser.role
+                        city: checkUser.city   
                     },
-                        process.env.JWT_SECRET
+                        process.env.JWT_KEY
                     )
                     res.json({ message: "Successfully Login", token })
                 } else {
@@ -72,7 +72,7 @@ const login = async (req, res) => {
         }
         catch (error) {
             res.status(400).json({
-                message: "user nhi hai"
+                message: error.message
             })
         }
     } else {
