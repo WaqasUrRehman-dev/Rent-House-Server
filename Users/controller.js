@@ -14,13 +14,13 @@ const all_users = async (req, res) => {
 }
 
 const signup = async (req, res) => {
-    const { username, email, password, role, address, city } = req.body;
-    if (username && email && password && role && address && city) {
+    const { username, email, password,type, address, city } = req.body;
+    if (username && email && password && type && address && city) {
         try {
             const checkUser = await userSchema.exists({ email })
 
             if (!checkUser) {
-                await userSchema.create({ username, email, role, address, city, password: await hash(password, 12) })
+                await userSchema.create({ username, email, type, role, address, city, password: await hash(password, 12) })
                 await SignupMail(username, email, "Sign Up Successfully")
 
                 res.status(201).json({ message: "User Created Successfully" })
@@ -36,6 +36,10 @@ const signup = async (req, res) => {
         }
     }
     else {
+        console.log({
+            username, email, password, type, address, city
+        
+        })
         res.status(400).json({ message: "required field missing" })
     }
 }
@@ -54,6 +58,7 @@ const login = async (req, res) => {
                     const token = sign({
                         name: checkUser.username,
                         email: checkUser.email,
+                        type: checkUser.type,
                         role: checkUser.role,
                         address: checkUser.address,
                         city: checkUser.city   
