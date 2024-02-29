@@ -14,7 +14,7 @@ const all_users = async (req, res) => {
 }
 
 const signup = async (req, res) => {
-    const { username, email, password,type, address, city } = req.body;
+    const { username, email, password,role,type, address, city } = req.body;
     if (username && email && password && type && address && city) {
         try {
             const checkUser = await userSchema.exists({ email })
